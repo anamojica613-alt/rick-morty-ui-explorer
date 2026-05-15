@@ -1,1 +1,12 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Angular cache
+.angular/
+
+# OS
+.DS_Store
+Thumbs.db
