@@ -81,3 +81,15 @@ El modal debe mostrar campos diferentes para Character, Episode y Location. Solu
 - Instalación de `ng-packagr@17` que faltaba como dependencia
 - Configuración del `paths` en `tsconfig.json` para resolver `ui-lib` desde `dist/`
 - Cast `as unknown as Record<string, unknown>[]` en el servicio para compatibilidad de tipos estrictos
+
+## Fase 5 — Modal de confirmación personalizado estilo Rick & Morty
+
+**Decisión:** Reemplazar `window.confirm()` nativo por un modal completamente personalizado.
+
+**Por qué:** El diálogo nativo del navegador no se puede estilizar y rompe la inmersión visual del tema. Un modal propio permite aplicar la paleta oscura, tipografía Orbitron, animaciones y el tono de humor característico de Rick & Morty.
+
+**Implementación:** Se agregó el signal `rowToDelete` en `ExplorerComponent`. Cuando es `null` el modal está oculto; cuando contiene un row, se muestra el modal con el nombre del personaje. Los métodos `cancelDelete()` y `confirmDelete()` gestionan el estado sin necesidad de librerías externas.
+
+**Reto:** Mantener el tipado estricto al acceder a `row['name']` siendo `row` de tipo `Record<string, unknown>`. Solución: cast explícito con `String(row['name'] ?? 'este registro')`.
+
+**Resultado:** Modal con calavera animada, título en Orbitron, mensaje con personalidad de la serie y botones diferenciados visualmente.
