@@ -190,7 +190,6 @@ const COLUMN_MAP: Record<ResourceType, TableColumn[]> = {
 export class ExplorerComponent implements OnInit {
   readonly explorer = inject(ExplorerService);
 
-  /** Row pendiente de eliminacion */
   readonly rowToDelete = signal<Record<string, unknown> | null>(null);
 
   /** Opciones del select de recurso */
@@ -253,14 +252,29 @@ export class ExplorerComponent implements OnInit {
     if (event.action === 'view') {
       this.explorer.openDetail(event.row);
     }
-    if (event.action === 'delete') {
-      if (window.confirm('¿Eliminar este registro?')) {
-        console.log('delete', event.row);
+  if (event.action === 'delete') {
+      const name = String(event.row['name'] ?? 'este registro');
+      if (window.confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) {
+        console.log('[ui-table] actionTriggered: delete confirmed', event.row);
       }
     }
+
+  getDeleteName(): string {
+    const row = this.rowToDelete();
+    if (!row) return '';
+    return String(row['name'] ?? 'este registro');
   }
 
-  getDeleteName(): string {\r\n    const row = this.rowToDelete();\r\n    if (!row) return '';\r\n    return String(row['name'] ?? 'este registro');\r\n  }\r\n\r\n  cancelDelete(): void {\r\n    this.rowToDelete.set(null);\r\n  }\r\n\r\n  confirmDelete(): void {\r\n    console.log('delete confirmed', this.rowToDelete());\r\n    this.rowToDelete.set(null);\r\n  }\r\n\r\n  /** Obtiene un campo del row seleccionado como string */
+  cancelDelete(): void {
+    this.rowToDelete.set(null);
+  }
+
+  confirmDelete(): void {
+    console.log('delete confirmed', this.rowToDelete());
+    this.rowToDelete.set(null);
+  }
+
+  /** Obtiene un campo del row seleccionado como string */
   getRowField(key: string): string {
     const row = this.explorer.selectedRow();
     if (!row) return '';
