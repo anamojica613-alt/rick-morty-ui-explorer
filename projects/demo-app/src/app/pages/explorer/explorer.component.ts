@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import {
   ButtonComponent,
@@ -161,11 +162,36 @@ const COLUMN_MAP: Record<ResourceType, TableColumn[]> = {
           </div>
         </div>
       }
+
+      @if (rowToDelete()) {
+        <div
+          class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+          (click)="cancelDelete()"
+        >
+          <div
+            class="w-full max-w-sm rounded-2xl border border-red-500/40 bg-gray-900 p-6"
+            (click)="$event.stopPropagation()"
+          >
+            <div class="flex justify-center mb-4"><span class="text-5xl animate-bounce">☠️</span></div>
+            <h2 class="text-center font-bold text-lg text-red-400 mb-2" style="font-family:Orbitron,sans-serif;">Zona de peligro</h2>
+            <p class="text-center text-gray-300 text-sm mb-1">Seguro que quieres eliminar del multiverso a</p>
+            <p class="text-center text-green-400 font-bold text-base mb-3">{{ getDeleteName() }}</p>
+            <p class="text-center text-xs text-gray-500 mb-6 italic">Esta accion no tiene vuelta atras... ni con el portal gun.</p>
+            <div class="flex gap-3">
+              <button class="flex-1 py-2.5 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors text-sm" (click)="cancelDelete()">Mejor no...</button>
+              <button class="flex-1 py-2.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-sm font-bold" (click)="confirmDelete()">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
 })
 export class ExplorerComponent implements OnInit {
   readonly explorer = inject(ExplorerService);
+
+  /** Row pendiente de eliminacion */
+  readonly rowToDelete = signal<Record<string, unknown> | null>(null);
 
   /** Opciones del select de recurso */
   readonly resourceOptions: SelectOption[] = [
@@ -234,7 +260,7 @@ export class ExplorerComponent implements OnInit {
     }
   }
 
-  /** Obtiene un campo del row seleccionado como string */
+  getDeleteName(): string {\r\n    const row = this.rowToDelete();\r\n    if (!row) return '';\r\n    return String(row['name'] ?? 'este registro');\r\n  }\r\n\r\n  cancelDelete(): void {\r\n    this.rowToDelete.set(null);\r\n  }\r\n\r\n  confirmDelete(): void {\r\n    console.log('delete confirmed', this.rowToDelete());\r\n    this.rowToDelete.set(null);\r\n  }\r\n\r\n  /** Obtiene un campo del row seleccionado como string */
   getRowField(key: string): string {
     const row = this.explorer.selectedRow();
     if (!row) return '';
