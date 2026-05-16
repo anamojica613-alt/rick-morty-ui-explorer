@@ -227,12 +227,11 @@ export class ExplorerComponent implements OnInit {
     if (event.action === 'view') {
       this.explorer.openDetail(event.row);
     }
-  if (event.action === 'delete') {
-      const name = String(event.row['name'] ?? 'este registro');
-      if (window.confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) {
-        console.log('[ui-table] actionTriggered: delete confirmed', event.row);
-      }
+    if (event.action === 'delete') {
+      // Output emite correctamente. Eliminación del estado local es opcional.
+      console.log('[ui-table] actionTriggered: delete', event.row);
     }
+  }
 
   /** Obtiene un campo del row seleccionado como string */
   getRowField(key: string): string {
