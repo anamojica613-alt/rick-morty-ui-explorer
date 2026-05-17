@@ -93,3 +93,18 @@ El modal debe mostrar campos diferentes para Character, Episode y Location. Solu
 **Reto:** Mantener el tipado estricto al acceder a `row['name']` siendo `row` de tipo `Record<string, unknown>`. Solución: cast explícito con `String(row['name'] ?? 'este registro')`.
 
 **Resultado:** Modal con calavera animada, título en Orbitron, mensaje con personalidad de la serie y botones diferenciados visualmente.
+## Fase 6 — Animación de carga personalizada
+
+**Decisión:** Reemplazar el skeleton de filas por un mensaje animado con temática Rick & Morty.
+
+**Por qué:** El skeleton genérico no aportaba personalidad visual. Una nave espacial animada con el mensaje "Escaneando el multiverso..." mantiene la coherencia temática y mejora la experiencia del usuario durante la espera.
+
+**Implementación:** Se modificó el estado loading del TableComponent para mostrar un emoji animado con CSS y un texto en verde con efecto pulse de Tailwind.
+
+## Fase 7 — Delay visual en las peticiones
+
+**Decisión:** Agregar un delay de 1500ms a las peticiones HTTP.
+
+**Por qué:** La API responde muy rápido y la animación de carga apenas se apreciaba. El delay permite que el usuario vea la animación y mejora la percepción de que algo está sucediendo.
+
+**Implementación:** Se usó el operador delay de RxJS en el pipe del observable HTTP del ExplorerService.
