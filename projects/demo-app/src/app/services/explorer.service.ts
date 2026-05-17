@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { delay } from 'rxjs/operators';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   ApiResponse,
@@ -126,6 +127,7 @@ export class ExplorerService {
 
     this.http
       .get<ApiResponse<Character | Episode | RMLocation>>(this.endpointUrl())
+      .pipe(delay(1500))
       .subscribe({
         next: (response) => {
           // Cast seguro: la tabla genérica trabaja con Record<string, unknown>
